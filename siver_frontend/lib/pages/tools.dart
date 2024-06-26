@@ -19,7 +19,9 @@ class _toolsState extends State<tools> {
           Container(
             width: 350,
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/investmentcalc');
+              },
               child: Text('Investment Calculator'),
               style: ButtonStyle(
                 //padding: WidgetStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.symmetric(vertical: 15.0, horizontal: 120.0 )),
@@ -37,7 +39,9 @@ class _toolsState extends State<tools> {
           Container(
             width: 350,
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                
+              },
               child: Text('Morgage Calculator'),
               style: ButtonStyle(
                 

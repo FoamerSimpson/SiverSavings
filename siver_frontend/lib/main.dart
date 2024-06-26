@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:siver_frontend/pages/homepage.dart';
 import 'package:siver_frontend/pages/tools.dart';
 import 'package:siver_frontend/pages/settings.dart';
-
+import 'package:siver_frontend/calculators/investment.dart';
 void main() => runApp(MaterialApp(
   initialRoute: '/home',
   routes: {
     //'/': (context) => const loading(),
     '/home': (context) => const homeScreen(),
-    //'/tools': (context) => const tools(),
-    //'/settings': (context)=> const settings(),
+    '/tools': (context) => const tools(),
+    '/settings': (context)=> const settings(),
+    '/investmentcalc': (context) => const Investment(),
   },
 ));
   
