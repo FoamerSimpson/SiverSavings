@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:siver_frontend/pages/loading.dart';
+import 'package:siver_frontend/pages/homepage.dart';
 import 'package:siver_frontend/pages/tools.dart';
 import 'package:siver_frontend/pages/settings.dart';
 
 void main() => runApp(MaterialApp(
   initialRoute: '/home',
   routes: {
-    '/': (context) => const loading(),
+    //'/': (context) => const loading(),
     '/home': (context) => const homeScreen(),
-    '/tools': (context) => const tools(),
-    '/settings': (context)=> const settings(),
+    //'/tools': (context) => const tools(),
+    //'/settings': (context)=> const settings(),
   },
 ));
   
@@ -23,7 +23,7 @@ class homeScreen extends StatefulWidget {
 class _homeScreenState extends State<homeScreen> {
   int myIndex = 0;
   List<Widget> widgetList = [
-    const homeScreen(),
+    const homePage(),
     const tools(),
     const settings(),
   ];
@@ -43,7 +43,7 @@ class _homeScreenState extends State<homeScreen> {
           ),
         ),
       ),
-      //body: widgetList[myIndex],
+      body: widgetList[myIndex],
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (index){
           setState(() {

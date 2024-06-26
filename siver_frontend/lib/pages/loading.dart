@@ -11,8 +11,8 @@ class _loadingState extends State<loading> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('loading'),
+      body: Text(
+        'hello',
       ),
     );
   }
