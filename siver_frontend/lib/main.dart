@@ -1,19 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:siver_frontend/pages/loading.dart';
+import 'package:siver_frontend/pages/tools.dart';
+import 'package:siver_frontend/pages/settings.dart';
 
 void main() => runApp(MaterialApp(
-  home: homeScreen(),
+  initialRoute: '/home',
+  routes: {
+    '/': (context) => const loading(),
+    '/home': (context) => const homeScreen(),
+    '/tools': (context) => const tools(),
+    '/settings': (context)=> const settings(),
+  },
 ));
   
-class homeScreen extends StatelessWidget {
+class homeScreen extends StatefulWidget {
   const homeScreen({super.key});
 
   @override
+  State<homeScreen> createState() => _homeScreenState();
+}
+
+class _homeScreenState extends State<homeScreen> {
+  int myIndex = 0;
+  List<Widget> widgetList = [
+    const homeScreen(),
+    const tools(),
+    const settings(),
+  ];
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 134, 130, 154),
+      backgroundColor: const Color.fromARGB(255, 134, 130, 154),
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(232, 117, 108, 1),
-        title: Center(
+        backgroundColor: const Color.fromRGBO(232, 117, 108, 1),
+        title: const Center(
           child: Text(
             "SiverSaver",
             style: TextStyle(
@@ -23,11 +43,17 @@ class homeScreen extends StatelessWidget {
           ),
         ),
       ),
-
+      //body: widgetList[myIndex],
       bottomNavigationBar: NavigationBar(
-        backgroundColor: Color.fromRGBO(232, 117, 108, 1),
+        onDestinationSelected: (index){
+          setState(() {
+            myIndex = index;
+          });
+        },
+        selectedIndex: myIndex,
+        backgroundColor: const Color.fromRGBO(232, 117, 108, 1),
         animationDuration: const Duration(milliseconds: 1000),
-        destinations: const <Widget>[
+        destinations:const <Widget>[
           NavigationDestination(
             icon: Icon(Icons.home),
             label: 'Home',
@@ -35,6 +61,7 @@ class homeScreen extends StatelessWidget {
           NavigationDestination(
             icon: Icon(Icons.architecture_outlined),
             label: 'Tools',
+            
           ),
           NavigationDestination(
             icon: Icon(Icons.settings),
