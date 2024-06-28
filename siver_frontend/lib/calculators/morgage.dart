@@ -1,30 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:string_validator/string_validator.dart';
 import 'package:siver_frontend/calculators/mathfunctions/math.dart';
+import 'package:string_validator/string_validator.dart';
 
-class Investment extends StatefulWidget {
-  const Investment({super.key});
+class Morgage extends StatefulWidget {
+  const Morgage({super.key});
 
   @override
-  State<Investment> createState() => _InvestmentState();
+  State<Morgage> createState() => _MorgageState();
 }
 
-class _InvestmentState extends State<Investment> {
+class _MorgageState extends State<Morgage> {
+  double loanAmount =0;
 
-  double initial =0;
-  int years =0;
+  double years =0;
+
   double interestRate=0;
+
   double monthly=0;
-  double total= 0;
+
+  String total= '';
 
   final _formGlobalKey=GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset : false,
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text('Investment Calculator'),
+        title: Text('Morgage Calculator'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -44,7 +48,7 @@ class _InvestmentState extends State<Investment> {
                       TextFormField(
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
-                          label: Text('Initial amount \$:')
+                          label: Text('Loan amount \$:')
                         ),
                         validator: (value) {
                           if(value == null || value.isEmpty){
@@ -62,7 +66,7 @@ class _InvestmentState extends State<Investment> {
 
                         onSaved: (value){
                           double x =double.parse(value!);
-                          initial = x;
+                          loanAmount = x;
                         },
 
                       ),
@@ -87,14 +91,14 @@ class _InvestmentState extends State<Investment> {
                           return null;
                         },
                         onSaved: (value){
-                          int x =int.parse(value!);
+                          double x =double.parse(value!);
                           years = x;
                         },
                       ),
                       TextFormField(
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
-                          label: Text('Return Rate:')
+                          label: Text('Interest Rate:')
                         ),
                         validator: (value) {
                           if(value == null || value.isEmpty){
@@ -115,33 +119,33 @@ class _InvestmentState extends State<Investment> {
                         },
                       ),
 
-                      TextFormField(
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          label: Text('Monthly contributions')
-                        ),
-                        validator: (value) {
-                          if(value == null || value.isEmpty){
-                            return 'enter a valid number';
-                          }
-                          if(!isNumeric(value)){
-                            return 'Numbers only';
-                          }
-                          int? x = int.parse(value);
-                          if(x < 0 || x > 15000){
-                            return 'You must enter a value between 0 and 15000';
-                          }
-                          return null;
-                        },
-                        onSaved: (value){
-                          double x =double.parse(value!);
-                          monthly = x;
-                        },
-                      ),
+                      // TextFormField(
+                      //   keyboardType: TextInputType.number,
+                      //   decoration: const InputDecoration(
+                      //     label: Text('Monthly contributions')
+                      //   ),
+                      //   validator: (value) {
+                      //     if(value == null || value.isEmpty){
+                      //       return 'enter a valid number';
+                      //     }
+                      //     if(!isNumeric(value)){
+                      //       return 'Numbers only';
+                      //     }
+                      //     int? x = int.parse(value);
+                      //     if(x < 0 || x > 15000){
+                      //       return 'You must enter a value between 0 and 15000';
+                      //     }
+                      //     return null;
+                      //   },
+                      //   onSaved: (value){
+                      //     double x =double.parse(value!);
+                      //     monthly = x;
+                      //   },
+                      //),
                       SizedBox(height: 30.0,),
                       Center(
                         child: Text(
-                          'Total Amount: \$$total',
+                          'Monthly payment: $total\$',
                           style: TextStyle(
                             fontFamily: 'Sivir',
                             fontSize: 25.0,
@@ -150,7 +154,7 @@ class _InvestmentState extends State<Investment> {
                       ),
                       
                       
-                      const SizedBox(height: 200),
+                      const SizedBox(height: 250),
                       FilledButton(
                         onPressed: () {
                           if(_formGlobalKey.currentState!.validate()){
@@ -158,7 +162,7 @@ class _InvestmentState extends State<Investment> {
                           }
                           
                           setState(() {
-                            total= investmentCalculation(initial, years, interestRate, monthly);
+                            total= morgageCalculation(loanAmount, years, interestRate);
                           });
                         },
                         style: FilledButton.styleFrom(

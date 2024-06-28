@@ -40,7 +40,7 @@ class _toolsState extends State<tools> {
             width: 350,
             child: TextButton(
               onPressed: () {
-                
+                Navigator.pushNamed(context, '/morgagecalc');
               },
               child: Text('Morgage Calculator'),
               style: ButtonStyle(

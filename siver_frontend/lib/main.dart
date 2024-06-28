@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:siver_frontend/calculators/morgage.dart';
 import 'package:siver_frontend/pages/homepage.dart';
 import 'package:siver_frontend/pages/tools.dart';
 import 'package:siver_frontend/pages/settings.dart';
@@ -11,6 +12,7 @@ void main() => runApp(MaterialApp(
     '/tools': (context) => const tools(),
     '/settings': (context)=> const settings(),
     '/investmentcalc': (context) => const Investment(),
+    '/morgagecalc': (context) => const Morgage(),
   },
 ));
   
