@@ -13,6 +13,17 @@ def get_contacts():
 @app.route('/contact', methods=['POST'])
 def create_contact():
     data = request.get_json()
+
+    # Check if username or email already exists
+    existing_username = Contact.query.filter_by(username=data['username']).first()
+    existing_email = Contact.query.filter_by(email=data['email']).first()
+
+    if existing_username:
+        return jsonify({"error": "Username already exists"}), 400
+
+    if existing_email:
+        return jsonify({"error": "Email already exists"}), 400
+
     new_contact = Contact(
         username=data['username'],
         password=data['password'],
