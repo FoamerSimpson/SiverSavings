@@ -31,7 +31,7 @@ def create_contact():
     )
     db.session.add(new_contact)
     db.session.commit()
-    return jsonify(new_contact.to_json()), 201
+    return jsonify({"message": "Account sucessfully created"}), 201
 
 if __name__ == "__main__":
     with app.app_context():

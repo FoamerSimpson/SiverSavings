@@ -1,20 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:siver_frontend/calculators/mathfunctions/math.dart';
-import 'package:string_validator/string_validator.dart';
+import 'dart:convert';
 
-class Morgage extends StatefulWidget {
-  const Morgage({super.key});
+import 'package:flutter/material.dart';
+import 'package:string_validator/string_validator.dart';
+import 'package:http/http.dart' as http;
+
+class Register extends StatefulWidget {
+  const Register({super.key});
 
   @override
-  State<Morgage> createState() => _MorgageState();
+  State<Register> createState() => _MorgageState();
 }
 
-class _MorgageState extends State<Morgage> {
-  double loanAmount =0;
+class _MorgageState extends State<Register> {
+  String email ='';
 
-  double years =0;
+  String username ='';
 
-  double interestRate=0;
+  String password='';
 
   double monthly=0;
 
@@ -48,25 +50,15 @@ class _MorgageState extends State<Morgage> {
                       TextFormField(
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
-                          label: Text('Loan amount \$:')
+                          label: Text('Email:')
                         ),
                         validator: (value) {
-                          if(value == null || value.isEmpty){
-                            return 'enter a valid number';
-                          }
-                          if(!isNumeric(value)){
-                            return 'Numbers only';
-                          }
-                          int? x = int.parse(value);
-                          if(x < 0 || x > 10000000){
-                            return 'You must enter a value between 0 and 10000000';
-                          }
-                          return null;
+                          
                         },
 
                         onSaved: (value){
-                          double x =double.parse(value!);
-                          loanAmount = x;
+                          
+                          email = value!;
                         },
 
                       ),
@@ -75,47 +67,26 @@ class _MorgageState extends State<Morgage> {
                       TextFormField(
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
-                          label: Text('Years:')
+                          label: Text('username:')
                         ),
                         validator: (value) {
-                          if(value == null || value.isEmpty){
-                            return 'enter a valid number';
-                          }
-                          if(!isNumeric(value)){
-                            return 'Numbers only';
-                          }
-                          int? x = int.parse(value);
-                          if(x < 0 || x > 70){
-                            return 'You must enter a value between 0 and 70';
-                          }
-                          return null;
+                          
                         },
                         onSaved: (value){
-                          double x =double.parse(value!);
-                          years = x;
+                          
+                          username = value!;
                         },
                       ),
                       TextFormField(
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
-                          label: Text('Interest Rate:')
+                          label: Text('password:')
                         ),
                         validator: (value) {
-                          if(value == null || value.isEmpty){
-                            return 'enter a valid number';
-                          }
-                          if(!isNumeric(value)){
-                            return 'Numbers only';
-                          }
-                          int? x = int.parse(value);
-                          if(x < 0 || x > 100){
-                            return 'You must enter a value between 0 and 100';
-                          }
-                          return null;
+                          
                         },
                         onSaved: (value){
-                          double x =double.parse(value!);
-                          interestRate = x;
+                          password = value!;
                         },
                       ),
 
@@ -133,13 +104,26 @@ class _MorgageState extends State<Morgage> {
                       
                       const SizedBox(height: 250),
                       FilledButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if(_formGlobalKey.currentState!.validate()){
                             _formGlobalKey.currentState!.save();
                           }
+
+                          var response = await http.post(Uri.parse('http://10.0.2.2:5000/contact'),
+                              headers: {
+                                'Content-Type': 'application/json', // Set headers
+                              },
+                            body:  jsonEncode({
+                              'email': email,
+                              'username': username,
+                              'password': password,
+
+                            })
+                          );
                           
                           setState(() {
-                            total= morgageCalculation(loanAmount, years, interestRate);
+                            var responseBody = jsonDecode(response.body);
+                            total = responseBody['message'];
                           });
                         },
                         style: FilledButton.styleFrom(
