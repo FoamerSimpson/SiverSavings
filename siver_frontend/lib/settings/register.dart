@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:string_validator/string_validator.dart';
 import 'package:http/http.dart' as http;
 
 class Register extends StatefulWidget {
@@ -30,7 +29,7 @@ class _MorgageState extends State<Register> {
       resizeToAvoidBottomInset : false,
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text('Morgage Calculator'),
+        title: const Text('Register'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -53,6 +52,8 @@ class _MorgageState extends State<Register> {
                           label: Text('Email:')
                         ),
                         validator: (value) {
+                          return null;
+                        
                           
                         },
 
@@ -70,6 +71,8 @@ class _MorgageState extends State<Register> {
                           label: Text('username:')
                         ),
                         validator: (value) {
+                          return null;
+                        
                           
                         },
                         onSaved: (value){
@@ -83,6 +86,8 @@ class _MorgageState extends State<Register> {
                           label: Text('password:')
                         ),
                         validator: (value) {
+                          return null;
+                        
                           
                         },
                         onSaved: (value){
@@ -90,11 +95,11 @@ class _MorgageState extends State<Register> {
                         },
                       ),
 
-                      SizedBox(height: 30.0,),
+                      const SizedBox(height: 30.0,),
                       Center(
                         child: Text(
-                          'Monthly payment: $total\$',
-                          style: TextStyle(
+                           total,
+                          style: const TextStyle(
                             fontFamily: 'Sivir',
                             fontSize: 25.0,
                           ),
@@ -123,7 +128,13 @@ class _MorgageState extends State<Register> {
                           
                           setState(() {
                             var responseBody = jsonDecode(response.body);
-                            total = responseBody['message'];
+                            if (response.statusCode==400){
+                              total = responseBody['error'];
+                            }else{
+                              total = responseBody['message'];
+                            }
+                            
+                            
                           });
                         },
                         style: FilledButton.styleFrom(
@@ -132,7 +143,7 @@ class _MorgageState extends State<Register> {
                             borderRadius: BorderRadius.circular(4)
                           )
                         ),
-                        child: Text('Submit'),
+                        child: const Text('Submit'),
                       ),
                     ],
                   )

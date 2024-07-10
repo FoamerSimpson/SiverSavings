@@ -6,15 +6,15 @@ double investmentCalculation(double initial, int years, double percent, double m
   int t = years;
   
   
-  double FV_initial = initial * pow((1 + r/n), n*t);
+  double fvInitial = initial * pow((1 + r/n), n*t);
   
   
-  double FV_contributions = monthly * (pow((1 + r/n), n*t) - 1) / (r/n);
+  double fvContributions = monthly * (pow((1 + r/n), n*t) - 1) / (r/n);
   
   
-  double FV_total = FV_initial + FV_contributions;
+  double fvTotal = fvInitial + fvContributions;
   
-  return double.parse(FV_total.toStringAsFixed(2));
+  return double.parse(fvTotal.toStringAsFixed(2));
 }
 
 String morgageCalculation(double amount, double years, double rate){

@@ -10,7 +10,7 @@ class loading extends StatefulWidget {
 class _loadingState extends State<loading> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Text(
         'hello',
       ),

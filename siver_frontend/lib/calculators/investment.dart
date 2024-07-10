@@ -24,7 +24,7 @@ class _InvestmentState extends State<Investment> {
       resizeToAvoidBottomInset : false,
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text('Investment Calculator'),
+        title: const Text('Investment Calculator'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -138,11 +138,11 @@ class _InvestmentState extends State<Investment> {
                           monthly = x;
                         },
                       ),
-                      SizedBox(height: 30.0,),
+                      const SizedBox(height: 30.0,),
                       Center(
                         child: Text(
                           'Total Amount: \$$total',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Sivir',
                             fontSize: 25.0,
                           ),
@@ -167,7 +167,7 @@ class _InvestmentState extends State<Investment> {
                             borderRadius: BorderRadius.circular(4)
                           )
                         ),
-                        child: Text('Submit'),
+                        child: const Text('Submit'),
                       ),
                     ],
                   )

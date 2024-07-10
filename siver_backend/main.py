@@ -10,6 +10,17 @@ def get_contacts():
     return jsonify([contact.to_json() for contact in contacts])
 
 
+@app.route('/contacts/clear', methods=['DELETE'])
+def clear_contacts():
+    try:
+        num_rows_deleted = db.session.query(Contact).delete()
+        db.session.commit()
+        return jsonify({'message': f'{num_rows_deleted} contacts deleted successfully.'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/contact', methods=['POST'])
 def create_contact():
     data = request.get_json()

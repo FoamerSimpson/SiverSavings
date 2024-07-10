@@ -28,7 +28,7 @@ class _MorgageState extends State<Morgage> {
       resizeToAvoidBottomInset : false,
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text('Morgage Calculator'),
+        title: const Text('Morgage Calculator'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -119,11 +119,11 @@ class _MorgageState extends State<Morgage> {
                         },
                       ),
 
-                      SizedBox(height: 30.0,),
+                      const SizedBox(height: 30.0,),
                       Center(
                         child: Text(
                           'Monthly payment: $total\$',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Sivir',
                             fontSize: 25.0,
                           ),
@@ -148,7 +148,7 @@ class _MorgageState extends State<Morgage> {
                             borderRadius: BorderRadius.circular(4)
                           )
                         ),
-                        child: Text('Submit'),
+                        child: const Text('Submit'),
                       ),
                     ],
                   )
