@@ -1,8 +1,10 @@
 
 #create
 from flask import request, jsonify
+from flask_migrate import Migrate
 from config import app, db
 from models import Contact
+from werkzeug.security import check_password_hash, generate_password_hash
 
 @app.route('/contacts', methods=['GET'])
 def get_contacts():
@@ -43,6 +45,23 @@ def create_contact():
     db.session.add(new_contact)
     db.session.commit()
     return jsonify({"message": "Account sucessfully created"}), 201
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    if not username or not password:
+        return jsonify({"message": "Username and password are required"}), 400
+    user = Contact.query.filter_by(username=username).first()
+
+    if user and check_password_hash(user._password_hash, password):
+        # Password matches
+        return jsonify({"message": "Login successful"}), 200
+    else:
+        # Username or password is incorrect
+        return jsonify({"error": "Invalid username or password"}), 401
+
 
 if __name__ == "__main__":
     with app.app_context():
