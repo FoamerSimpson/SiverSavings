@@ -4,6 +4,7 @@ import 'package:siver_frontend/pages/homepage.dart';
 import 'package:siver_frontend/pages/tools.dart';
 import 'package:siver_frontend/pages/settings.dart';
 import 'package:siver_frontend/calculators/investment.dart';
+import 'package:siver_frontend/settings/login.dart';
 import 'package:siver_frontend/settings/register.dart';
 void main() => runApp(MaterialApp(
   initialRoute: '/home',
@@ -15,6 +16,7 @@ void main() => runApp(MaterialApp(
     '/investmentcalc': (context) => const Investment(),
     '/morgagecalc': (context) => const Morgage(),
     '/register': (context) => const Register(),
+    '/login' : (context) => const Login()
   },
 ));
   

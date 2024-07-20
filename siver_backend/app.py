@@ -52,7 +52,7 @@ def login():
     username = data.get('username')
     password = data.get('password')
     if not username or not password:
-        return jsonify({"message": "Username and password are required"}), 400
+        return jsonify({"error": "Username and password are required"}), 400
     user = Contact.query.filter_by(username=username).first()
 
     if user and check_password_hash(user._password_hash, password):
@@ -60,7 +60,7 @@ def login():
         return jsonify({"message": "Login successful"}), 200
     else:
         # Username or password is incorrect
-        return jsonify({"error": "Invalid username or password"}), 401
+        return jsonify({"error": "Invalid username or password"}), 400
 
 
 if __name__ == "__main__":

@@ -2,26 +2,23 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-class Register extends StatefulWidget {
-  const Register({super.key});
+class Login extends StatefulWidget {
+  const Login({super.key});
 
   @override
-  State<Register> createState() => _MorgageState();
+  State<Login> createState() => _LoginState();
 }
 
-class _MorgageState extends State<Register> {
-  String email ='';
+class _LoginState extends State<Login> {
 
   String username ='';
 
   String password='';
 
-  double monthly=0;
-
-  String total= '';
+  String returnMessage='';
 
   final _formGlobalKey=GlobalKey<FormState>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +26,7 @@ class _MorgageState extends State<Register> {
       resizeToAvoidBottomInset : false,
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: const Text('Register'),
+        title: const Text('Login'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -45,26 +42,6 @@ class _MorgageState extends State<Register> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-
-                      TextFormField(
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: const InputDecoration(
-                          label: Text('Email:')
-                        ),
-                        validator: (value) {
-                          return null;
-                        
-                          
-                        },
-
-                        onSaved: (value){
-                          
-                          email = value!;
-                        },
-
-                      ),
-
-
                       TextFormField(
                         keyboardType: TextInputType.name,
                         decoration: const InputDecoration(
@@ -72,7 +49,6 @@ class _MorgageState extends State<Register> {
                         ),
                         validator: (value) {
                           return null;
-                        
                           
                         },
                         onSaved: (value){
@@ -82,7 +58,7 @@ class _MorgageState extends State<Register> {
                       ),
                       TextFormField(
                         obscureText: true,
-                        keyboardType: TextInputType.visiblePassword,
+                        keyboardType: TextInputType.name,
                         decoration: const InputDecoration(
                           label: Text('password:')
                         ),
@@ -99,7 +75,7 @@ class _MorgageState extends State<Register> {
                       const SizedBox(height: 30.0,),
                       Center(
                         child: Text(
-                           total,
+                           returnMessage,
                           style: const TextStyle(
                             fontFamily: 'Sivir',
                             fontSize: 25.0,
@@ -115,12 +91,11 @@ class _MorgageState extends State<Register> {
                             _formGlobalKey.currentState!.save();
                           }
   
-                          var response = await http.post(Uri.parse('http://10.0.2.2:5000/contact'),
+                          var response = await http.post(Uri.parse('http://10.0.2.2:5000/login'),
                               headers: {
                                 'Content-Type': 'application/json', // Set headers
                               },
                             body:  jsonEncode({
-                              'email': email,
                               'username': username,
                               'password': password,
 
@@ -130,9 +105,9 @@ class _MorgageState extends State<Register> {
                           setState(() {
                             var responseBody = jsonDecode(response.body);
                             if (response.statusCode==400){
-                              total = responseBody['error'];
+                              returnMessage = responseBody['error'];
                             }else{
-                              total = responseBody['message'];
+                              returnMessage = responseBody['message'];
                             }
                             
                             
