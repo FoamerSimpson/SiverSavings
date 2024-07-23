@@ -1,6 +1,5 @@
-
-#create
-from flask import request, jsonify
+from flask_session import Session
+from flask import request, jsonify, session
 from flask_migrate import Migrate
 from config import app, db
 from models import Contact
@@ -26,8 +25,7 @@ def clear_contacts():
 @app.route('/contact', methods=['POST'])
 def create_contact():
     data = request.get_json()
-
-    # Check if username or email already exists
+    
     existing_username = Contact.query.filter_by(username=data['username']).first()
     existing_email = Contact.query.filter_by(email=data['email']).first()
 
@@ -56,11 +54,22 @@ def login():
     user = Contact.query.filter_by(username=username).first()
 
     if user and check_password_hash(user._password_hash, password):
-        # Password matches
+        session['user_id'] = user.id
+        session['username'] = user.username
         return jsonify({"message": "Login successful"}), 200
     else:
-        # Username or password is incorrect
         return jsonify({"error": "Invalid username or password"}), 400
+    
+
+@app.route('/protected')    
+def protected():
+    if 'user_id' not in session:
+        return jsonify({"error": "Unauthorized access"}), 401
+
+    user_id = session['user_id']
+    user = Contact.query.get(user_id)
+    
+    return jsonify({"message": f"Welcome {user.username}"}), 200
 
 
 if __name__ == "__main__":
