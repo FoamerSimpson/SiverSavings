@@ -56,10 +56,36 @@ def login():
     if user and check_password_hash(user._password_hash, password):
         session['user_id'] = user.id
         session['username'] = user.username
-        return jsonify({"message": "Login successful"}), 200
+        return jsonify({"message": f"Login successful, Welcome {user.username}" }), 200
     else:
         return jsonify({"error": "Invalid username or password"}), 400
     
+
+@app.route('/update_savings', methods=['POST'])
+def savingsUpdate():
+    if 'user_id' not in session:
+        return jsonify({"message": "Log in required"}), 401
+    data = request.get_json()
+    if not data or 'savings' not in data:
+        return jsonify({"message": "Invalid input"}), 400
+
+    new_savings = data['savings']
+    
+    try:
+        new_savings = float(new_savings)
+    except ValueError:
+        return jsonify({"message": "Savings must be a number"}), 400
+
+    user_id = session['user_id']
+    user = Contact.query.get(user_id)
+
+    if user is None:
+        return jsonify({"message": "User not found"}), 404
+
+    user.savings_goal = new_savings
+    db.session.commit()
+
+    return jsonify({"message": "Savings updated successfully"}), 200
 
 @app.route('/protected')    
 def protected():
@@ -69,7 +95,7 @@ def protected():
     user_id = session['user_id']
     user = Contact.query.get(user_id)
     
-    return jsonify({"message": f"Welcome {user.username}"}), 200
+    return jsonify({"message": f"Welcome {user.savings_goal}"}), 200
 
 
 if __name__ == "__main__":

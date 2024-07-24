@@ -1,11 +1,14 @@
 from config import db
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_migrate import Migrate
+
 
 class Contact(db.Model):
     id= db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     _password_hash = db.Column(db.String(128), unique=False, nullable=False)
     email = db.Column(db.String(35), unique=True, nullable=False)
+    savings_goal = db.Column(db.Integer, nullable=True)
 
     @property
     def password(self):
