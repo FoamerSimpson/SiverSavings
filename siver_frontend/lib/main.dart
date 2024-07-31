@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:siver_frontend/calculators/morgage.dart';
+import 'package:provider/provider.dart';
+import 'sessionprovider.dart';
 import 'package:siver_frontend/pages/homepage.dart';
 import 'package:siver_frontend/pages/tools.dart';
 import 'package:siver_frontend/pages/settings.dart';
 import 'package:siver_frontend/calculators/investment.dart';
 import 'package:siver_frontend/settings/login.dart';
 import 'package:siver_frontend/settings/register.dart';
-void main() => runApp(MaterialApp(
-  initialRoute: '/home',
-  routes: {
-    //'/': (context) => const loading(),
-    '/home': (context) => const homeScreen(),
-    '/tools': (context) => const tools(),
-    '/settings': (context)=> const settings(),
-    '/investmentcalc': (context) => const Investment(),
-    '/morgagecalc': (context) => const Morgage(),
-    '/register': (context) => const Register(),
-    '/login' : (context) => const Login()
-  },
-));
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => SessionProvider(),
+      child: MaterialApp(
+        initialRoute: '/home',
+        routes: {
+          '/home': (context) => const homeScreen(),
+          '/tools': (context) => const tools(),
+          '/settings': (context) => const settings(),
+          '/investmentcalc': (context) => const Investment(),
+          '/morgagecalc': (context) => const Morgage(),
+          '/register': (context) => const Register(),
+          '/login': (context) => const Login(),
+        },
+      ),
+    ),
+  );
+}
   
 class homeScreen extends StatefulWidget {
   const homeScreen({super.key});

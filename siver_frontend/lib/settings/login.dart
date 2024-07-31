@@ -1,7 +1,8 @@
 import 'dart:convert';
-
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:siver_frontend/sessionprovider.dart';
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -116,6 +117,7 @@ class _LoginState extends State<Login> {
                             }else{
                               returnMessage = responseBody['message'];
                               sessionCookie = response.headers['set-cookie'];
+                              Provider.of<SessionProvider>(context, listen: false).setSessionCookie(sessionCookie);
                             }
                             
                             
@@ -132,7 +134,7 @@ class _LoginState extends State<Login> {
                     const SizedBox(height: 30.0,),
                     FilledButton(
                       child: Text('Click to print cookie'),
-                      onPressed: () => print(sessionCookie),
+                      onPressed: () => print(Provider.of<SessionProvider>(context, listen: false).sessionCookie),
                     ),
                     ],
                   )
