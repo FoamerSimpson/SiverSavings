@@ -38,7 +38,7 @@ class homeScreen extends StatefulWidget {
 class _homeScreenState extends State<homeScreen> {
   int myIndex = 0;
   List<Widget> widgetList = [
-    const homePage(),
+    const HomePage(),
     const tools(),
     const settings(),
   ];
