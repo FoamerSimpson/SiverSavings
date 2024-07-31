@@ -10,6 +10,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  String? sessionCookie;
 
   String username ='';
 
@@ -18,6 +19,10 @@ class _LoginState extends State<Login> {
   String returnMessage='';
 
   final _formGlobalKey=GlobalKey<FormState>();
+
+  String? getSessionCookie(){
+    return sessionCookie;
+  }
 
 
   @override
@@ -101,6 +106,8 @@ class _LoginState extends State<Login> {
 
                             })
                           );
+
+                          
                           
                           setState(() {
                             var responseBody = jsonDecode(response.body);
@@ -108,6 +115,7 @@ class _LoginState extends State<Login> {
                               returnMessage = responseBody['error'];
                             }else{
                               returnMessage = responseBody['message'];
+                              sessionCookie = response.headers['set-cookie'];
                             }
                             
                             
@@ -121,6 +129,11 @@ class _LoginState extends State<Login> {
                         ),
                         child: const Text('Submit'),
                       ),
+                    const SizedBox(height: 30.0,),
+                    FilledButton(
+                      child: Text('Click to print cookie'),
+                      onPressed: () => print(sessionCookie),
+                    ),
                     ],
                   )
                 ],
@@ -131,5 +144,7 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+
+    
   }
 }
