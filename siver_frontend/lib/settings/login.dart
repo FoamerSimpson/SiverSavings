@@ -20,7 +20,17 @@ class _LoginState extends State<Login> {
 
   String returnMessage='';
 
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   final _formGlobalKey=GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   String? getSessionCookie(){
     return sessionCookie;
@@ -50,6 +60,7 @@ class _LoginState extends State<Login> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       TextFormField(
+                        controller: _usernameController,
                         keyboardType: TextInputType.name,
                         decoration: const InputDecoration(
                           label: Text('username:')
@@ -64,6 +75,7 @@ class _LoginState extends State<Login> {
                         },
                       ),
                       TextFormField(
+                        controller: _passwordController,
                         obscureText: true,
                         keyboardType: TextInputType.name,
                         decoration: const InputDecoration(
@@ -115,10 +127,13 @@ class _LoginState extends State<Login> {
                             var responseBody = jsonDecode(response.body);
                             if (response.statusCode==400){
                               returnMessage = responseBody['error'];
+                              _passwordController.clear();
                             }else{
                               returnMessage = responseBody['message'];
                               sessionCookie = response.headers['set-cookie'];
                               Provider.of<SessionProvider>(context, listen: false).setSessionCookie(sessionCookie);
+                              _usernameController.clear();
+                              _passwordController.clear();
                             }
                                                        
                           });
@@ -126,7 +141,6 @@ class _LoginState extends State<Login> {
                             setState(() {
                               returnMessage = "cannot connect";
                             });
-                            
                           }
                         },
                         style: FilledButton.styleFrom(
