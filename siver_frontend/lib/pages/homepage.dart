@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:provider/provider.dart';
-import '../sessionprovider.dart'; // Ensure this is the correct import path
+import '../sessionprovider.dart';
+import 'dart:async';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,29 +25,35 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _fetchSavingsGoal() async {
     try {
-      // Access session cookie from provider
+      
       final sessionCookie = Provider.of<SessionProvider>(context, listen: false).sessionCookie;
 
-      // Include session cookie in headers
+      
       final response = await http.get(
         Uri.parse('http://10.0.2.2:5000/protected'),
         headers: {
           'Content-Type': 'application/json',
-          'Cookie': sessionCookie ?? '', // Include the session cookie here
+          'Cookie': sessionCookie ?? '', 
         },
-      );
+      ).timeout(const Duration(seconds: 3));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         setState(() {
-          _savingsGoal = data['message'];
+          _savingsGoal = "Savings goal: " + data['message'];
         });
       } else {
         setState(() {
-          _savingsGoal = 'Error: ${jsonDecode(response.body)['error']}';
+          _savingsGoal = 'Please log in or make an account.';
         });
       }
-    } catch (e) {
+    }on TimeoutException {
+    setState(() {
+      _savingsGoal = 'Cannot connect';
+    });
+  }
+    
+     catch (e) {
       setState(() {
         _savingsGoal = 'Failed to fetch data';
       });
@@ -68,7 +77,7 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 20),
             Text(
-              'Savings Goal: $_savingsGoal',
+              _savingsGoal,
               style: TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 20),

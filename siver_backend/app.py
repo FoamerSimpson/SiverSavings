@@ -90,12 +90,12 @@ def savingsUpdate():
 @app.route('/protected')    
 def protected():
     if 'user_id' not in session:
-        return jsonify({"error": "Unauthorized access"}), 401
+        return jsonify({"error": "Login required"}), 401
 
     user_id = session['user_id']
     user = Contact.query.get(user_id)
     
-    return jsonify({"message": f"Welcome {user.savings_goal}"}), 200
+    return jsonify({"message": f"{user.savings_goal}"}), 200
 
 
 if __name__ == "__main__":
