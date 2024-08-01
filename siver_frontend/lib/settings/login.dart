@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:siver_frontend/sessionprovider.dart';
+import 'dart:async';
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -75,6 +76,7 @@ class _LoginState extends State<Login> {
                         },
                         onSaved: (value){
                           password = value!;
+                          
                         },
                       ),
 
@@ -96,19 +98,18 @@ class _LoginState extends State<Login> {
                           if(_formGlobalKey.currentState!.validate()){
                             _formGlobalKey.currentState!.save();
                           }
-  
+                          try{  
                           var response = await http.post(Uri.parse('http://10.0.2.2:5000/login'),
                               headers: {
-                                'Content-Type': 'application/json', // Set headers
+                                'Content-Type': 'application/json', 
                               },
                             body:  jsonEncode({
                               'username': username,
                               'password': password,
 
                             })
-                          );
+                          ).timeout(const Duration(seconds: 3));;
 
-                          
                           
                           setState(() {
                             var responseBody = jsonDecode(response.body);
@@ -119,9 +120,14 @@ class _LoginState extends State<Login> {
                               sessionCookie = response.headers['set-cookie'];
                               Provider.of<SessionProvider>(context, listen: false).setSessionCookie(sessionCookie);
                             }
-                            
-                            
+                                                       
                           });
+                          } on TimeoutException{
+                            setState(() {
+                              returnMessage = "cannot connect";
+                            });
+                            
+                          }
                         },
                         style: FilledButton.styleFrom(
                           backgroundColor: Colors.grey[800],
