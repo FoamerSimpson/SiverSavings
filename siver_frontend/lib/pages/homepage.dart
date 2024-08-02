@@ -47,6 +47,7 @@ class _HomePageState extends State<HomePage> {
         });
       }
     }on TimeoutException {
+    if (!mounted) return;
     setState(() {
       _savingsGoal = 'Cannot connect';
     });

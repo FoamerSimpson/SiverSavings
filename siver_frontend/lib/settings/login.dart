@@ -120,8 +120,8 @@ class _LoginState extends State<Login> {
                               'password': password,
 
                             })
-                          ).timeout(const Duration(seconds: 3));;
-
+                          ).timeout(const Duration(seconds: 3));
+                          if (!mounted) return;
                           
                           setState(() {
                             var responseBody = jsonDecode(response.body);
@@ -138,6 +138,7 @@ class _LoginState extends State<Login> {
                                                        
                           });
                           } on TimeoutException{
+                            if (!mounted) return;
                             setState(() {
                               returnMessage = "cannot connect";
                             });
