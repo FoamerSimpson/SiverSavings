@@ -43,7 +43,7 @@ def create_contact():
     db.session.add(new_contact)
     db.session.commit()
     return jsonify({"message": "Account sucessfully created"}), 201
-
+#log in route
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -60,8 +60,13 @@ def login():
     else:
         return jsonify({"error": "Invalid username or password"}), 400
     
-
+#logout route
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    return jsonify({"message": "Logged out successfully"}), 200
 @app.route('/update_savings', methods=['POST'])
+
 def savingsUpdate():
     if 'user_id' not in session:
         return jsonify({"message": "Log in required"}), 401

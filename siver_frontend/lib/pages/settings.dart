@@ -56,6 +56,27 @@ class _toolsState extends State<settings> {
               child: const Text('Log in'),
             ),
           ),
+          SizedBox(
+            width: 350,
+            child: TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/login');
+                
+              },
+              style: ButtonStyle(
+                //padding: WidgetStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.symmetric(vertical: 15.0, horizontal: 120.0 )),
+                shadowColor: WidgetStateProperty.all<Color>(const Color.fromARGB(255, 173, 96, 152)),
+                backgroundColor: WidgetStateProperty.all<Color>(const Color.fromARGB(255, 137, 211, 141)),
+                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                  const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                  side: BorderSide(color: Colors.red)
+                  )
+                ),
+              ),
+              child: const Text('Log Out'),
+            ),
+          ),
           
 
         ],),
