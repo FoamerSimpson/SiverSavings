@@ -3,7 +3,12 @@ from flask import request, jsonify, session
 from flask_migrate import Migrate
 from config import app, db
 from models import Contact
+import requests
 from werkzeug.security import check_password_hash, generate_password_hash
+
+
+api = "3afa609b9e0e41f2ba23ace655d8509c"
+ticker = "AAPL"
 
 @app.route('/contacts', methods=['GET'])
 def get_contacts():
@@ -103,8 +108,24 @@ def protected():
     return jsonify({"message": f"{user.savings_goal}"}), 200
 
 
+@app.route('/get_stock_price/<string:ticker>', methods=['GET'])
+def get_stock_price(ticker):
+    url = f"https://api.twelvedata.com/price?symbol={ticker}&apikey={api}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return jsonify(response.json()), 200
+    else:
+        return jsonify({"error": "Failed to fetch stock price"}), response.status_code
+
+
+
+#grabber functions
+def get_stock_price(ticker, api):
+    url = f"https://api.twelvedata.com/price?symbol={ticker}&apikey={api}"
+    response = requests.get(url).json()
+    print(response)
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    
     app.run(debug=True)
