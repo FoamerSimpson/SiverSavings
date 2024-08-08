@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:siver_frontend/calculators/morgage.dart';
 import 'package:provider/provider.dart';
+import 'package:siver_frontend/pages/stocks.dart';
 import 'sessionprovider.dart';
 import 'package:siver_frontend/pages/homepage.dart';
 import 'package:siver_frontend/pages/tools.dart';
@@ -22,6 +23,7 @@ void main() {
           '/morgagecalc': (context) => const Morgage(),
           '/register': (context) => const Register(),
           '/login': (context) => const Login(),
+          '/stocks': (context)=> const Stocks(),
         },
       ),
     ),
@@ -39,6 +41,7 @@ class _homeScreenState extends State<homeScreen> {
   int myIndex = 0;
   List<Widget> widgetList = [
     const HomePage(),
+    const Stocks(),
     const tools(),
     const settings(),
   ];
@@ -73,6 +76,7 @@ class _homeScreenState extends State<homeScreen> {
             icon: Icon(Icons.home),
             label: 'Home',
           ),
+          NavigationDestination(icon: Icon(Icons.bar_chart), label: 'Stocks'),
           NavigationDestination(
             icon: Icon(Icons.architecture_outlined),
             label: 'Tools',
