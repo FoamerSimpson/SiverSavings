@@ -1,8 +1,20 @@
 class Stock {
+  String? ticker;
+  double? value;
 
-  final String ticker;
-  final double value;
+  Stock({this.ticker, this.value});
 
-  Stock({required this.ticker, required this.value});
+  factory Stock.fromJson(Map<String, dynamic> json) {
+    return Stock(
+      ticker: json['ticker'],
+      value: json['value'],
+    );
+  }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'ticker': ticker,
+      'value': value,
+    };
+  }
 }
