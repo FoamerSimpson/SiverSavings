@@ -112,7 +112,7 @@ Future<void> refreshAllStocks() async {
 
  Widget stockTemplate(Stock stock) {
   return Card(
-    margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+    margin: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
     child: Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -128,10 +128,11 @@ Future<void> refreshAllStocks() async {
           IconButton(
             icon: Icon(Icons.close),
             color: Colors.grey[500],
-            onPressed: () {
+            onPressed: () async {
               setState(() {
                 Stocklist.remove(stock);
               });
+              await _saveStockList();
             },
           ),
         ],
