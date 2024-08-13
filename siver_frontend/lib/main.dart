@@ -9,7 +9,7 @@ import 'package:siver_frontend/pages/settings.dart';
 import 'package:siver_frontend/calculators/investment.dart';
 import 'package:siver_frontend/settings/login.dart';
 import 'package:siver_frontend/settings/register.dart';
-void main() {
+void main() { 
   runApp(
     ChangeNotifierProvider(
       create: (context) => SessionProvider(),

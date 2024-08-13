@@ -92,7 +92,14 @@ class _StocksState extends State<Stocks> {
   return Stock(ticker: ticker, value: 0.0);
 }
 
-
+Future<void> refreshAllStocks() async {
+  for (int i = 0; i < Stocklist.length; i++) {
+    final updatedStock = await fetchUpdatedStockPrice(Stocklist[i].ticker!);
+    setState(() {
+      Stocklist[i] = updatedStock;
+    });
+  }
+}
 
   void _showErrorMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -103,10 +110,13 @@ class _StocksState extends State<Stocks> {
     );
   }
 
-  Widget stockTemplate(Stock stock) {
-    return Card(
-      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-      child: Column(
+ Widget stockTemplate(Stock stock) {
+  return Card(
+    margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
             '${stock.ticker} - ${stock.value}',
@@ -115,11 +125,20 @@ class _StocksState extends State<Stocks> {
               fontSize: 25.0,
             ),
           ),
-          SizedBox(height: 6.0),
+          IconButton(
+            icon: Icon(Icons.close),
+            color: Colors.grey[500],
+            onPressed: () {
+              setState(() {
+                Stocklist.remove(stock);
+              });
+            },
+          ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -139,11 +158,24 @@ class _StocksState extends State<Stocks> {
                 ),
               ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                fetchStockPrice(tickerController.text);
-              },
-              child: Text('Add Stock'),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    fetchStockPrice(tickerController.text);
+                  },
+                  child: Text('Add Stock'),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 137, 211, 141)),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.refresh),
+                  onPressed: () {
+                    refreshAllStocks();
+                  },
+                ),
+              ],
             ),
             Expanded(
               child: ListView(
