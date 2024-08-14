@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
-import '../sessionprovider.dart';
 import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -23,42 +22,40 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _fetchSavingsGoal() async {
-    try {
-      
-      final sessionCookie = Provider.of<SessionProvider>(context, listen: false).sessionCookie;
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    final sessionCookie = prefs.getString('sessionCookie');
 
-      
-      final response = await http.get(
-        Uri.parse('http://10.0.2.2:5000/protected'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Cookie': sessionCookie ?? '', 
-        },
-      ).timeout(const Duration(seconds: 3));
+    final response = await http.get(
+      Uri.parse('http://10.0.2.2:5000/protected'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': sessionCookie ?? '', 
+      },
+    ).timeout(const Duration(seconds: 3));
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        setState(() {
-          _savingsGoal = "Savings goal: " + data['message'];
-        });
-      } else {
-        setState(() {
-          _savingsGoal = 'Please log in or make an account.';
-        });
-      }
-    }on TimeoutException {
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      setState(() {
+        _savingsGoal = "Savings goal: " + data['message'];
+      });
+    } else {
+      setState(() {
+        _savingsGoal = 'Please log in or make an account.';
+      });
+    }
+  } on TimeoutException {
     if (!mounted) return;
     setState(() {
       _savingsGoal = 'Cannot connect';
     });
+  } catch (e) {
+    setState(() {
+      _savingsGoal = 'Failed to fetch data';
+    });
   }
-    
-     catch (e) {
-      setState(() {
-        _savingsGoal = 'Failed to fetch data';
-      });
-    }
-  }
+}
+
 
   @override
   Widget build(BuildContext context) {

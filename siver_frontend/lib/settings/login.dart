@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:siver_frontend/sessionprovider.dart';
 import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -30,6 +31,11 @@ class _LoginState extends State<Login> {
     _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _saveSessionCookie(String? cookie) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('sessionCookie', cookie ?? '');
   }
 
   String? getSessionCookie(){
@@ -132,6 +138,7 @@ class _LoginState extends State<Login> {
                               returnMessage = responseBody['message'];
                               sessionCookie = response.headers['set-cookie'];
                               Provider.of<SessionProvider>(context, listen: false).setSessionCookie(sessionCookie);
+                              _saveSessionCookie(sessionCookie);
                               _usernameController.clear();
                               _passwordController.clear();
                             }
