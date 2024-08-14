@@ -160,10 +160,6 @@ class _LoginState extends State<Login> {
                         child: const Text('Submit'),
                       ),
                     const SizedBox(height: 30.0,),
-                    FilledButton(
-                      child: Text('Click to print cookie'),
-                      onPressed: () => print(Provider.of<SessionProvider>(context, listen: false).sessionCookie),
-                    ),
                     ],
                   )
                 ],

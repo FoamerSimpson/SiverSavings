@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class settings extends StatefulWidget {
   const settings({super.key});
@@ -7,7 +11,19 @@ class settings extends StatefulWidget {
   State<settings> createState() => _toolsState();
 }
 
+
+
 class _toolsState extends State<settings> {
+
+  void _showErrorMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +58,6 @@ class _toolsState extends State<settings> {
                 Navigator.pushNamed(context, '/login');
               },
               style: ButtonStyle(
-                //padding: WidgetStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.symmetric(vertical: 15.0, horizontal: 120.0 )),
                 shadowColor: WidgetStateProperty.all<Color>(const Color.fromARGB(255, 173, 96, 152)),
                 backgroundColor: WidgetStateProperty.all<Color>(const Color.fromARGB(255, 137, 211, 141)),
                 shape: WidgetStateProperty.all<RoundedRectangleBorder>(
@@ -58,12 +73,52 @@ class _toolsState extends State<settings> {
           SizedBox(
             width: 350,
             child: TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/login');
-                
+              onPressed: () async {
+                try {
+                  final prefs = await SharedPreferences.getInstance();
+                  final sessionCookie = prefs.getString('sessionCookie');
+
+                  if (sessionCookie == null || sessionCookie.isEmpty) {
+                    _showErrorMessage('You are not logged in');
+                    return;
+                  }
+
+                  final response = await http.get(
+                    Uri.parse('http://10.0.2.2:5000/logout'),
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Cookie': sessionCookie,
+                    },
+                  ).timeout(const Duration(seconds: 3));
+
+                  if (response.statusCode == 200) {
+                    await prefs.remove('sessionCookie');
+
+                    if (mounted) {
+                      _showErrorMessage('Logout successful');
+                    }
+                  } else {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Logout failed: ${response.statusCode}')),
+                      );
+                    }
+                  }
+                } on TimeoutException {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Request timed out')),
+                    );
+                  }
+                } catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error during logout: $e')),
+                    );
+                  }
+  }
               },
               style: ButtonStyle(
-                //padding: WidgetStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.symmetric(vertical: 15.0, horizontal: 120.0 )),
                 shadowColor: WidgetStateProperty.all<Color>(const Color.fromARGB(255, 173, 96, 152)),
                 backgroundColor: WidgetStateProperty.all<Color>(const Color.fromARGB(255, 137, 211, 141)),
                 shape: WidgetStateProperty.all<RoundedRectangleBorder>(

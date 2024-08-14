@@ -70,6 +70,7 @@ def login():
 def logout():
     session.pop('user_id', None)
     return jsonify({"message": "Logged out successfully"}), 200
+
 @app.route('/update_savings', methods=['POST'])
 
 def savingsUpdate():
